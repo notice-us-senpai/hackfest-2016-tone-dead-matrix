@@ -2,6 +2,7 @@
 <head>
   <title>Phaserix</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
@@ -10,7 +11,7 @@
   <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
-<div class="container">
+<div class="container noSelect">
   <center>
   <div class="row">
     <div class="col s12">
@@ -112,6 +113,15 @@ $('.change-instrument').click(function() {
 });
 
 var tickLength = 500; // 500 milliseconds == 0.5 seconds
+
+/*
+$(function() {
+    $(".selectable").selectable();
+});
+*/
+
+$('img').on('dragstart', function(event) { event.preventDefault(); });
+
 </script>
 <script src="click.js"></script>
 <script src="timer.js"></script>
