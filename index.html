@@ -19,6 +19,9 @@
 
   <!-- Favicon -->
   <link rel="icon" href="oracion-seis.png" type="image/png">
+
+  <!-- Keyboard shortcuts -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/mousetrap/1.4.6/mousetrap.min.js"></script>
 </head>
 
 <body>
@@ -247,6 +250,61 @@ var tick = 0;
 
 // NO DRAGGING (:
 $('img').on('dragstart', function(event) { event.preventDefault(); });
+
+// Keyboard shortcuts
+Mousetrap.bind('s', function(e) {
+  // your function here...
+});
+
+// Konami Code
+Mousetrap.bind('up up down down left right left right b a enter', function() {
+  alert('Nani wa Konami Code?');
+});
+
+// Keyboard shortcut: Navigate across instruments
+Mousetrap.bind('right', function() {
+  navigate(true);
+});
+
+Mousetrap.bind('left', function() {
+  navigate(false);
+});
+
+function navigate(right) {
+  $('.'+active_instru_class).removeClass(active_instru_class); // deactivate
+  if (right) {
+    current_instrument = (current_instrument+1) % number_of_instruments;
+  } else {
+    current_instrument = (current_instrument == 0) ? 
+      number_of_instruments-1 : current_instrument-1;
+  }
+  $('#i'+current_instrument).toggleClass(active_instru_class); // activate
+  
+  // re-render the image
+  var instru_img_ref = ['piano', 'flute', 'drums', 'violin', 'xylophone'];
+  for (var i = 0; i < number_of_instruments; i++) {
+    var instru_selector = '.' + instru_img_ref[i];
+    if ($(instru_selector).hasClass(active_instru_class)) {
+      $(instru_selector).html(
+        '<img class="five-instru-img-btn" src="'+img_dir+instru_img_ref[i]+'_on.png">');
+    } else {
+      $(instru_selector).html(
+        '<img class="five-instru-img-btn" src="'+img_dir+instru_img_ref[i]+'_off.png">');
+    }
+  }
+
+  // re-render tone-matrix
+  for (var i = 0; i < order; i++){
+    for (var j = 0;j < order; j++){
+      var square_selector = '#r'+i+'c'+j;
+      if (instruments[current_instrument].on_off_matrix[i][j]) {
+        $(square_selector).attr('src', mat_sq_img[1]); // square_on
+      } else {
+        $(square_selector).attr('src', mat_sq_img[0]);
+      }
+    }
+  }
+} // End of navigate function
 </script>
 <script src="timer.js"></script>
 <script src="play.js"></script>
