@@ -8,7 +8,7 @@ removeSound = function(sound, tick) {
 	var current_sounds = sounds_to_play[tick];
 	var foundIndex = current_sounds.indexOf(sound);
 	if (foundIndex > -1) {
-		current_sounds.splice(index, 1);
+		current_sounds.splice(foundIndex, 1);
 		sounds_to_play[tick] = current_sounds;
 	} else {
 		window.alert("Warning: sound not found");
