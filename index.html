@@ -1,28 +1,30 @@
-<!doctype html> 
-<html lang="en"> 
+<html>
 <head> 
-	<meta charset="UTF-8" />
-	<title>Phaserix</title>
-    <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
-    <style type="text/css">
-        body {
-            margin: 0;
-        }
-    </style>
+  <title>Phaserix</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 </head>
 <body>
 
-<script type="text/javascript">
+<div class="tone-matrix">
+  <table class="tone-matrix-table"></table>
+</div>
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+<script>
 
-function preload() {
+function sprintf(format) {
+  for (var i = 1; i < arguments.length; i++) {
+    format = format.replace(/%s/, arguments[i]);
+  }
+  return format;
 }
 
-function create() {
-}
+var order = 8;
 
-function update() {
+for (var i = 0; i < order; i++) {
+  $('.tone-matrix-table').append(sprintf('<tr class="r%s"></tr>', i));
+  for (var j = 0; j < order; j++) {
+    $('.r' + i).append(sprintf('<td class="r%s-c%s"><img src="bird.png"></td>', i, j));
+  }
 }
 
 </script>
