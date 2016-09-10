@@ -15,7 +15,7 @@
   <div class="row">
     <div class="col s12">
       <div class="tone-matrix">
-        <table class="tone-matrix-table center-align" style="width:512px"></table>
+        <table class="t0 center-align" style="width:512px"></table>
       </div>
     </div>
   </div>
@@ -23,6 +23,15 @@
     <div class="col s12">
       <a class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
       <a class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">stop</i></a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12">
+      <a id="t1" class="change-instrument btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
+      <a id="t2" class="change-instrument btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
+      <a id="t3" class="change-instrument btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
+      <a id="t4" class="change-instrument btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
+      <a id="t5" class="change-instrument btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
     </div>
   </div>
   </center>
@@ -37,15 +46,26 @@ function sprintf(format) {
 }
 
 var order = 16;
+var table = 0;
 
 for (var i = 0; i < order; i++) {
-  $('.tone-matrix-table').append(sprintf('<tr class="r%s"></tr>', i));
+  $('.t0').append(sprintf('<tr class="r%s"></tr>', i));
   for (var j = 0; j < order; j++) {
-    $('.r' + i).append(sprintf('<td class="r%s-c%s" style="padding: 1px 0px;"><img src="Images/Square.png"></td>', i, j));
+    $('.r' + i).append(sprintf('<td class="r%sc%s" style="padding: 1px 0px;"><img src="Images/Square.png"></td>', i, j));
   }
 }
 
 var sounds_to_play = [];
+
+function OnOffMatrix(sounds) {
+    this.on_off = []; // initialise in next commit
+    this.sounds = sounds;
+}
+
+$('.change-instrument').click(function() {
+  table = $(this).attr('id')[1]; // will break if id > 9
+  // pass
+});
 
 </script>
 <script src="click.js"></script>
