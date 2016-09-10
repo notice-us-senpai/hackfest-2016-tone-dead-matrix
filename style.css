@@ -1,5 +1,6 @@
 body {
 	background-image: url('./Exports/background.jpg');
+	padding-top: 4px;
 }
 
 .no-select {
@@ -9,4 +10,29 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+footer {
+	color: powderblue;
+	padding-left: 4px;
+}
+
+h1 {
+	color: azure;
+}
+
+ol, li {
+	color: ghostwhite;
+	list-style-type: none;
+  list-style-position: inside;
+  margin: 0;
+  padding: 0;
+}
+
+li:before {
+	content: "* ";
+}
+
+li:after {
+	content: " *";
 }

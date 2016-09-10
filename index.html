@@ -16,21 +16,46 @@
   
   <!-- Our styles -->
   <link rel="stylesheet" href="style.css" type="text/css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="oracion-seis.png" type="image/png">
 </head>
 
 <body>
 <div class="no-select">
-<center>
   <div class="row"> <!-- Row 1 -->
-  <div class="col s12">
+  <div class="col s8">
+    <center>
     <table class="tone-matrix center-align" style="width:512px">
       <!-- Dynamic content via JQuery -->
     </table>
-  </div> <!-- End of col s12 no-select div -->
+    </center>
+  </div> <!-- End of col s8 no-select div -->
+  <div class="col s4">
+    <h1>Oraci&oacute;n Seis
+      Tone Matrix</h1>
+    <p>
+      <ol>
+        <li>You may choose an instrument below to begin.</li>
+        <li>You may click anywhere on the matrix to play a tune.</li>
+        <li>You may toggle the selection of the matrix cells.</li>
+        <li>You may form a spell with a combination of instruments.</li>
+      </ol>
+    </p>
+    <div class="row">
+    <a class="waves-effect waves-light btn" onClick="resetActiveSelect();">
+      <i class="material-icons left">clear_all</i>Purify Matrix</a>
+    </div>
+    <div class="row">
+    <a class="waves-effect waves-light btn" onClick="resetAllSelect();">
+      <i class="material-icons left">stop</i>End The World</a>
+    </div>
+  </div>
   </div> <!-- End of row 1 div -->
 
   <div class="row"> <!-- Row 2 -->
   <div class="col s12 no-select">
+    <center>
     <!-- Warning: Do not change the below ID unless it remains in the form of x0 -->
     <!-- See current_instrument = $(this).attr('id')[1]; -->
     <a id="i0" class="piano change-instrument waves-effect waves-light active-instrument">
@@ -43,9 +68,9 @@
       <img class="five-instru-img-btn" src="./Exports/violin_off.png"></a>
     <a id="i4" class="xylophone change-instrument waves-effect waves-light">
       <img class="five-instru-img-btn" src="./Exports/xylophone_off.png"></a>
+    </center>
   </div> <!-- End of col s12 no-select div -->
   </div> <!-- End of row 2 div -->
-</center>
 </div> <!-- End of no-select div -->
 
 <script>
@@ -95,7 +120,7 @@ var number_of_instruments = 5;
 var sound_folder_names = ["piano", "flute", "electric_guitar", "tone_matrix", "xylophone"]
 for (var i = 0; i < number_of_instruments; i++) {
   var sound_file_names = [];
-  for(var j=1;j<=16;j++){
+  for (var j=1;j<=16;j++){
     sound_file_names[j]="Sound/"+sound_folder_names[i]+"/"+j+".mp3";
   }
   instruments[i] = new OnOffMatrix(sound_file_names);
@@ -146,12 +171,13 @@ function get_before(xs, ch) {
 // 1. toggle active-instrument classes for both the active and inactive instrument
 // 2. update to the corresponding images
 // 3. re-renders the tone-matrix to that of the active instrument (state is kept)
+var active_instru_class = 'active-instrument';
 $('.change-instrument').click(function() {
   // if the clicked instrument was not an active instrument
   // make the active inactive and make the clicked instrument active
-  if (!$(this).hasClass('active-instrument')) {
-    $('.active-instrument').removeClass('active-instrument'); // deactivate
-    $(this).toggleClass('active-instrument'); // activate
+  if (!$(this).hasClass(active_instru_class)) {
+    $('.'+active_instru_class).removeClass(active_instru_class); // deactivate
+    $(this).toggleClass(active_instru_class); // activate
   }
   // else the active but clicked instrument remains active
   
@@ -159,7 +185,7 @@ $('.change-instrument').click(function() {
   var instru_img_ref = ['piano', 'flute', 'drums', 'violin', 'xylophone'];
   for (var i = 0; i < number_of_instruments; i++) {
     var instru_selector = '.' + instru_img_ref[i];
-    if ($(instru_selector).hasClass('active-instrument')) {
+    if ($(instru_selector).hasClass(active_instru_class)) {
       $(instru_selector).html(
         '<img class="five-instru-img-btn" src="'+img_dir+instru_img_ref[i]+'_on.png">');
     } else {
@@ -183,6 +209,39 @@ $('.change-instrument').click(function() {
   }
 });
 
+// RESET SELECTION ON ACTIVE INSTRU
+function resetActiveSelect() {
+  for (var i = 0; i < order; i++) {
+    for (var j = 0; j < order; j++) {
+      // if current selection is selected, deselect it
+      var flag = instruments[current_instrument].on_off_matrix[i][j];
+      if (flag) {
+        instruments[current_instrument].on_off_matrix[i][j] = !flag;
+        $('#r'+i+'c'+j).attr('src', mat_sq_img[0]);
+        removeSound(instruments[current_instrument].sounds[i], j);
+      }
+    }
+  }
+}
+
+// RESET SELECTION ON ALL INSTRU
+function resetAllSelect() {
+  // Note that current_instrument is NOT used here because we are parsing ALL
+  for (var instru = 0; instru < number_of_instruments; instru++) {
+    for (var i = 0; i < order; i++) {
+      for (var j = 0; j < order; j++) {
+        // if current selection is selected, deselect it
+        var flag = instruments[instru].on_off_matrix[i][j];
+        if (flag) {
+          instruments[instru].on_off_matrix[i][j] = !flag;
+          $('#r'+i+'c'+j).attr('src', mat_sq_img[0]);
+          removeSound(instruments[instru].sounds[i], j);
+        }
+      }
+    }
+  }
+}
+
 // play.js
 var tick = 0;
 
@@ -199,5 +258,6 @@ $(document).ready(function() {
 });
 </script>
 
+<footer>&copy; Conan, Chia Hui, Jason, Jia Yee, Yi Min, Yu Feng</footer>
 </body>
 </html>
