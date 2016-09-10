@@ -16,10 +16,12 @@ function play() {
 			sounds_at_curr_tick[j].mediaGroup = 'currentSoundGroupTick_' + i;
 			// All the sounds that is supposed to play at this tick is in the same mediaGroup
 		}
-
-		sounds_at_curr_tick[0].play();
-		// Just choose any of the sounds to play to start playing them simultaneously
-
-		setTimeout(function() {}, tickLength);
+		
+		setTimeout(playSound(sounds_at_curr_tick[0]), tickLength);
 	}
+}
+
+// Just choose any of the sounds to play to start playing them simultaneously
+function playSound(sounds) {
+	sounds.play();
 }

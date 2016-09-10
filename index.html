@@ -72,7 +72,8 @@ var folders = ["piano", "flute", "electric_guitar", "tone_matrix", "xylophone"]
 for (var i = 0; i < number_of_instruments; i++) {
   var sounds = [];
   for(var j=1;j<=16;j++){
-    sounds[j]=folders+"j"+".wav";
+    sounds[j]="Sound/"+folders[i]+"/"+j+".wav";
+    console.log(sounds[j]);
   }
   instruments[i] = new OnOffMatrix(sounds);
 }
@@ -111,11 +112,14 @@ $('.change-instrument').click(function() {
 });
 
 var tickLength = 500; // 500 milliseconds == 0.5 seconds
-
 </script>
 <script src="click.js"></script>
 <script src="timer.js"></script>
 <script src="play.js"></script>
+
+<script>
+play();
+</script>
 
 </body>
 </html>
