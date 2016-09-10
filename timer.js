@@ -14,9 +14,3 @@ function removeSound(sound, tick) {
 		window.alert("Warning: sound not found");
 	}
 }
-
-function getSound(path) {
-	return new Howl({
-		src: [path]
-	})
-}
