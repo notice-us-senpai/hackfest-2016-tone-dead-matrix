@@ -35,6 +35,9 @@
 </div>
 <script>
 
+var addSound;
+var removeSound;
+
 function sprintf(format) {
   for (var i = 1; i < arguments.length; i++) {
     format = format.replace(/%s/, arguments[i]);
@@ -54,6 +57,9 @@ for (var i = 0; i < order; i++) {
 }
 
 var sounds_to_play = []; // 16 per instrument array
+for (var i = 0; i < 16; i++) {
+  sounds_to_play[i] = [];
+}
 
 function OnOffMatrix(sounds) {
     this.on_off = [];
@@ -72,7 +78,7 @@ var folders = ["piano", "flute", "electric_guitar", "tone_matrix", "xylophone"]
 for (var i = 0; i < number_of_instruments; i++) {
   var sounds = [];
   for(var j=1;j<=16;j++){
-    sounds[j]="Sound/"+folders[i]+"/"+j+".wav";
+    sounds[j]="Sound/"+folders[i]+"/"+j+".mp3";
     console.log(sounds[j]);
   }
   instruments[i] = new OnOffMatrix(sounds);
@@ -88,11 +94,11 @@ $('.cell').click(function(){
     instruments[table].on_off[row][col] = !flag;
     if(!flag){
       $('#r'+row+'c'+col).attr('src',images[1]);
-      //addSound(instruments[table].sounds[row],col);
+      addSound(instruments[table].sounds[row],col);
     }
     else{
       $('#r'+row+'c'+col).attr('src',images[0]);
-      //removeSound(instruments[table].sounds[row],col);
+      removeSound(instruments[table].sounds[row],col);
     }
 });
 
@@ -116,9 +122,12 @@ var tickLength = 500; // 500 milliseconds == 0.5 seconds
 <script src="click.js"></script>
 <script src="timer.js"></script>
 <script src="play.js"></script>
+<script src="playtest.js"></script>
 
 <script>
-play();
+$(document).ready(function() {
+  playtest();
+});
 </script>
 
 </body>
