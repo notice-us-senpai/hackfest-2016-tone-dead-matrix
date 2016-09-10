@@ -24,12 +24,12 @@
     <!--  -->
   </div>
   <div class="row">
-    <div class="col s12">
-      <a id="t0" class="change-instrument waves-effect waves-light active-instrument"><img class="five-instruments" src="./Exports/piano_on.png"></a>
-      <a id="t1" class="change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/flute_off.png"></a>
-      <a id="t2" class="change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/drums_off.png"></a>
-      <a id="t3" class="change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/violin_off.png"></a>
-      <a id="t4" class="change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/xylophone_off.png"></a>
+    <div class="col s12 noSelect">
+      <a id="t0" class="piano change-instrument waves-effect waves-light active-instrument"><img class="five-instruments" src="./Exports/piano_on.png"></a>
+      <a id="t1" class="flute change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/flute_off.png"></a>
+      <a id="t2" class="drums change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/drums_off.png"></a>
+      <a id="t3" class="violin change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/violin_off.png"></a>
+      <a id="t4" class="xylophone change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/xylophone_off.png"></a>
     </div>
   </div>
   </center>
@@ -80,7 +80,7 @@ for (var i = 0; i < number_of_instruments; i++) {
   var sounds = [];
   for(var j=1;j<=16;j++){
     sounds[j]="Sound/"+folders[i]+"/"+j+".mp3";
-    console.log(sounds[j]);
+    // console.log(sounds[j]);
   }
   instruments[i] = new OnOffMatrix(sounds);
 }
@@ -103,9 +103,53 @@ $('.cell').click(function(){
     }
 });
 
+function get_before(xs, ch) {
+  var i = 0;
+  var ys = [];
+  while (true) {
+    if (xs[i] != ch) {
+      ys[i] = xs[i];
+      i++;
+    }
+    else {
+      break;
+    }
+  }
+  return ys;
+}
+
 $('.change-instrument').click(function() {
+  if (!$(this).hasClass('active-instrument')) {
+    $('.active-instrument').removeClass('active-instrument');
+  }
+  $(this).toggleClass('active-instrument');
+  if ($('.piano').hasClass('active-instrument')) {
+    $('.piano').html('<img class="five-instruments" src="./Exports/piano_on.png">');
+  } else {
+    $('.piano').html('<img class="five-instruments" src="./Exports/piano_off.png">');
+  }
+  if ($('.flute').hasClass('active-instrument')) {  
+    $('.flute').html('<img class="five-instruments" src="./Exports/flute_on.png">');
+  } else {
+    $('.flute').html('<img class="five-instruments" src="./Exports/flute_off.png">');
+  }
+  if ($('.drums').hasClass('active-instrument')) {  
+    $('.drums').html('<img class="five-instruments" src="./Exports/drums_on.png">');
+  } else {
+    $('.drums').html('<img class="five-instruments" src="./Exports/drums_off.png">');
+  }
+  if ($('.violin').hasClass('active-instrument')) {  
+    $('.violin').html('<img class="five-instruments" src="./Exports/violin_on.png">');
+  } else {
+    $('.violin').html('<img class="five-instruments" src="./Exports/violin_off.png">');
+  }
+  if ($('.xylophone').hasClass('active-instrument')) {  
+    $('.xylophone').html('<img class="five-instruments" src="./Exports/xylophone_on.png">');
+  } else {
+    $('.xylophone').html('<img class="five-instruments" src="./Exports/xylophone_off.png">');
+  }
   table = $(this).attr('id')[1]; // will break if id > 9
-  console.log(table);
+  // console.log(table);
   for(var i=0;i<16;i++){
     for(var j=0;j<16;j++){
       if(instruments[table].on_off[i][j]){
