@@ -250,14 +250,19 @@ var tick = 0;
 // NO DRAGGING (:
 $('img').on('dragstart', function(event) { event.preventDefault(); });
 
-// Keyboard shortcuts
-Mousetrap.bind('s', function(e) {
-  // your function here...
-});
-
 // Konami Code
 Mousetrap.bind('up up down down left right left right b a enter', function() {
   alert('Nani wa Konami Code?');
+});
+
+// Keyboard shortcut: Reset active
+Mousetrap.bind('x', function() {
+  resetActiveSelect();
+});
+
+// Keyboard shortcut: Reset all
+Mousetrap.bind('z', function() {
+  resetAllSelect();
 });
 
 // Keyboard shortcut: Navigate across instruments
@@ -304,6 +309,48 @@ function navigate(right) {
     }
   }
 } // End of navigate function
+
+// Keyboard shortcut: Select cell
+// breaks if order < 9
+for (var r = 0; r < 10; r++) {
+  for (var c = 0; c < 10; c++) {
+    var key = '0 ' + r + ' 0 ' + c;
+    Mousetrap.bind(key, function(e, combo) {
+      updateBoolImgSound(combo[2], combo[6]);
+    });
+  }
+}
+
+for (var r = 10; r < order; r++) {
+  for (var c = 10; c < order; c++) {
+    var row = r.toString();
+    var col = c.toString();
+    var key = sprintf('%s %s %s %s', row[0], row[1], col[0], col[1]);
+    Mousetrap.bind(key, function(e, combo) {
+      updateBoolImgSound(combo[0]+combo[2], combo[4]+combo[6]);
+    });
+  }
+}
+
+// Updates the boolean, image, and sound upon keyboard shortcut
+function updateBoolImgSound(row, col) {
+  console.log(row);
+  console.log(col);
+  row = parseInt(row);
+  col = parseInt(col);
+  var flag = instruments[current_instrument].on_off_matrix[row][col];
+  instruments[current_instrument].on_off_matrix[row][col] = !flag;
+  
+  // update image and sound
+  var square_selector = '#r'+row+'c'+col;
+  if (!flag) {
+    $(square_selector).attr('src', mat_sq_img[1]); // square_on
+    addSound(instruments[current_instrument].sounds[row], col);
+  } else {
+    $(square_selector).attr('src', mat_sq_img[0]);
+    removeSound(instruments[current_instrument].sounds[row], col);
+  }
+}
 </script>
 <script src="timer.js"></script>
 <script src="play.js"></script>
