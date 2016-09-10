@@ -1,44 +1,55 @@
 <html>
 <head>
-  <title>Phaserix</title>
+  <title>Oraci&oacute;n Seis</title>
+
+  <!-- JQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+  <!-- <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script> -->
+  
+  <!-- Google Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+  
+  <!-- Our styles -->
   <link rel="stylesheet" href="style.css" type="text/css">
 </head>
+
 <body>
-<div class="noSelect">
-  <center>
-  <div class="row">
-    <div class="col s12">
-      <div class="tone-matrix">
-        <table class="matrix-table center-align" style="width:512px"></table>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <!--  -->
-  </div>
-  <div class="row">
-    <div class="col s12 noSelect">
-      <a id="t0" class="piano change-instrument waves-effect waves-light active-instrument"><img class="five-instruments" src="./Exports/piano_on.png"></a>
-      <a id="t1" class="flute change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/flute_off.png"></a>
-      <a id="t2" class="drums change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/drums_off.png"></a>
-      <a id="t3" class="violin change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/violin_off.png"></a>
-      <a id="t4" class="xylophone change-instrument waves-effect waves-light"><img class="five-instruments" src="./Exports/xylophone_off.png"></a>
-    </div>
-  </div>
-  </center>
-</div>
+<div class="no-select">
+<center>
+  <div class="row"> <!-- Row 1 -->
+  <div class="col s12">
+    <table class="tone-matrix center-align" style="width:512px">
+      <!-- Dynamic content via JQuery -->
+    </table>
+  </div> <!-- End of col s12 no-select div -->
+  </div> <!-- End of row 1 div -->
+
+  <div class="row"> <!-- Row 2 -->
+  <div class="col s12 no-select">
+    <!-- Warning: Do not change the below ID unless it remains in the form of x0 -->
+    <!-- See current_instrument = $(this).attr('id')[1]; -->
+    <a id="i0" class="piano change-instrument waves-effect waves-light active-instrument">
+      <img class="five-instru-img-btn" src="./Exports/piano_on.png"></a>
+    <a id="i1" class="flute change-instrument waves-effect waves-light">
+      <img class="five-instru-img-btn" src="./Exports/flute_off.png"></a>
+    <a id="i2" class="drums change-instrument waves-effect waves-light">
+      <img class="five-instru-img-btn" src="./Exports/drums_off.png"></a>
+    <a id="i3" class="violin change-instrument waves-effect waves-light">
+      <img class="five-instru-img-btn" src="./Exports/violin_off.png"></a>
+    <a id="i4" class="xylophone change-instrument waves-effect waves-light">
+      <img class="five-instru-img-btn" src="./Exports/xylophone_off.png"></a>
+  </div> <!-- End of col s12 no-select div -->
+  </div> <!-- End of row 2 div -->
+</center>
+</div> <!-- End of no-select div -->
+
 <script>
-
-var addSound;
-var removeSound;
-
+// HELPER: Print formatted for JavaScript (only for string data type)
 function sprintf(format) {
   for (var i = 1; i < arguments.length; i++) {
     format = format.replace(/%s/, arguments[i]);
@@ -46,63 +57,76 @@ function sprintf(format) {
   return format;
 }
 
-var order = 16;
-var table = 0;
-var images=["Exports/square.png","Exports/square_on.png"];
+var order = 16; // size of matrix
+var img_dir = './Exports/';
+var mat_sq_img = [img_dir+"/square.png",img_dir+"square_on.png"]; // matrix square img
 
+// Initialise tone-matrix table (HTML)
 for (var i = 0; i < order; i++) {
-  $('.matrix-table').append(sprintf('<tr class="r%s"></tr>', i));
+  $('.tone-matrix').append(sprintf('<tr class="r%s"></tr>', i)); // row
   for (var j = 0; j < order; j++) {
-    $('.r' + i).append(sprintf('<td class="r%sc%s cell" data-row="%s" data-col="%s" style="padding: 1px 0px;"><img id="r%sc%s" src="%s"></td>', i, j, i, j, i, j, images[0]));
+    $('.r' + i).append(
+      sprintf('<td class="cell r%sc%s" data-row="%s" data-col="%s" style="padding: 1px 0px;"><img id="r%sc%s" src="%s"></td>', 
+        i, j, i, j, i, j, mat_sq_img[0]));
   }
 }
 
-var sounds_to_play = []; // 16 per instrument array
-for (var i = 0; i < 16; i++) {
+// Initialise tone-matrix table (ordered by time and pitch)
+var sounds_to_play = [];
+for (var i = 0; i < order; i++) {
   sounds_to_play[i] = [];
 }
 
+// OnOffMatrix class which stores a 2D array of booleans (to play or not to play)
 function OnOffMatrix(sounds) {
-    this.on_off = [];
-    for (var i = 0; i < order; i++) {
-      this.on_off[i] = [];
-      for (var j = 0; j < order; j++) {
-        this.on_off[i][j] = false;
-      }
+  this.on_off_matrix = [];
+  for (var i = 0; i < order; i++) { // row
+    this.on_off_matrix[i] = [];
+    for (var j = 0; j < order; j++) { // col
+      this.on_off_matrix[i][j] = false;
     }
-    this.sounds = sounds;
+  }
+  this.sounds = sounds;
 }
 
+// Initialise on-off matrix table (tracks if a sound should be played)
 var instruments = [];
 var number_of_instruments = 5;
-var folders = ["piano", "flute", "electric_guitar", "tone_matrix", "xylophone"]
+var sound_folder_names = ["piano", "flute", "electric_guitar", "tone_matrix", "xylophone"]
 for (var i = 0; i < number_of_instruments; i++) {
-  var sounds = [];
+  var sound_file_names = [];
   for(var j=1;j<=16;j++){
-    sounds[j]="Sound/"+folders[i]+"/"+j+".mp3";
-    // console.log(sounds[j]);
+    sound_file_names[j]="Sound/"+sound_folder_names[i]+"/"+j+".mp3";
   }
-  instruments[i] = new OnOffMatrix(sounds);
+  instruments[i] = new OnOffMatrix(sound_file_names);
 }
 
-var images=["Exports/square.png","Exports/square_on.png"];
-
+// When a cell is clicked, toggle the boolean (to play or not to play)
+// and subsequently the corresponding image and sound state
+var addSound;
+var removeSound;
+var current_instrument = 0; // ID of active instrument/matrix
 $('.cell').click(function(){
+  var row = $(this).data("row");
+  var col = $(this).data("col");
+  var flag = instruments[current_instrument].on_off_matrix[row][col];
+    
+  instruments[current_instrument].on_off_matrix[row][col] = !flag;
 
-    var flag=instruments[table].on_off[$(this).data("row")][$(this).data("col")];
-    var row = $(this).data("row");
-    var col = $(this).data("col");
-    instruments[table].on_off[row][col] = !flag;
-    if(!flag){
-      $('#r'+row+'c'+col).attr('src',images[1]);
-      addSound(instruments[table].sounds[row],col);
-    }
-    else{
-      $('#r'+row+'c'+col).attr('src',images[0]);
-      removeSound(instruments[table].sounds[row],col);
-    }
+  // update image and sound
+  var square_selector = '#r'+row+'c'+col;
+  if (!flag) {
+    $(square_selector).attr('src', mat_sq_img[1]); // square_on
+    addSound(instruments[current_instrument].sounds[row], col);
+  } else {
+    $(square_selector).attr('src', mat_sq_img[0]);
+    removeSound(instruments[current_instrument].sounds[row], col);
+  }
 });
 
+// HELPER: Returns a new array sliced from xs (array) just before ch (char)
+// ch MUST exist in xs (no error-checking)
+// Should have done splice right...?
 function get_before(xs, ch) {
   var i = 0;
   var ys = [];
@@ -118,66 +142,56 @@ function get_before(xs, ch) {
   return ys;
 }
 
+// if instrument is changed
+// 1. toggle active-instrument classes for both the active and inactive instrument
+// 2. update to the corresponding images
+// 3. re-renders the tone-matrix to that of the active instrument (state is kept)
 $('.change-instrument').click(function() {
+  // if the clicked instrument was not an active instrument
+  // make the active inactive and make the clicked instrument active
   if (!$(this).hasClass('active-instrument')) {
-    $('.active-instrument').removeClass('active-instrument');
+    $('.active-instrument').removeClass('active-instrument'); // deactivate
+    $(this).toggleClass('active-instrument'); // activate
   }
-  $(this).toggleClass('active-instrument');
-  if ($('.piano').hasClass('active-instrument')) {
-    $('.piano').html('<img class="five-instruments" src="./Exports/piano_on.png">');
-  } else {
-    $('.piano').html('<img class="five-instruments" src="./Exports/piano_off.png">');
+  // else the active but clicked instrument remains active
+  
+  // re-render the image
+  var instru_img_ref = ['piano', 'flute', 'drums', 'violin', 'xylophone'];
+  for (var i = 0; i < number_of_instruments; i++) {
+    var instru_selector = '.' + instru_img_ref[i];
+    if ($(instru_selector).hasClass('active-instrument')) {
+      $(instru_selector).html(
+        '<img class="five-instru-img-btn" src="'+img_dir+instru_img_ref[i]+'_on.png">');
+    } else {
+      $(instru_selector).html(
+        '<img class="five-instru-img-btn" src="'+img_dir+instru_img_ref[i]+'_off.png">');
+    }
   }
-  if ($('.flute').hasClass('active-instrument')) {  
-    $('.flute').html('<img class="five-instruments" src="./Exports/flute_on.png">');
-  } else {
-    $('.flute').html('<img class="five-instruments" src="./Exports/flute_off.png">');
-  }
-  if ($('.drums').hasClass('active-instrument')) {  
-    $('.drums').html('<img class="five-instruments" src="./Exports/drums_on.png">');
-  } else {
-    $('.drums').html('<img class="five-instruments" src="./Exports/drums_off.png">');
-  }
-  if ($('.violin').hasClass('active-instrument')) {  
-    $('.violin').html('<img class="five-instruments" src="./Exports/violin_on.png">');
-  } else {
-    $('.violin').html('<img class="five-instruments" src="./Exports/violin_off.png">');
-  }
-  if ($('.xylophone').hasClass('active-instrument')) {  
-    $('.xylophone').html('<img class="five-instruments" src="./Exports/xylophone_on.png">');
-  } else {
-    $('.xylophone').html('<img class="five-instruments" src="./Exports/xylophone_off.png">');
-  }
-  table = $(this).attr('id')[1]; // will break if id > 9
-  // console.log(table);
-  for(var i=0;i<16;i++){
-    for(var j=0;j<16;j++){
-      if(instruments[table].on_off[i][j]){
-        $('#r'+i+'c'+j).attr('src',images[1]);
-      }
-      else{
-        $('#r'+i+'c'+j).attr('src',images[0]);
+
+  current_instrument = $(this).attr('id')[1]; // will break if id > 9
+
+  // re-render tone-matrix
+  for (var i = 0; i < order; i++){
+    for (var j = 0;j < order; j++){
+      var square_selector = '#r'+i+'c'+j;
+      if (instruments[current_instrument].on_off_matrix[i][j]) {
+        $(square_selector).attr('src', mat_sq_img[1]); // square_on
+      } else {
+        $(square_selector).attr('src', mat_sq_img[0]);
       }
     }
   }
 });
 
-var tickLength = 500; // 500 milliseconds == 0.5 seconds
+// play.js
 var tick = 0;
 
-/*
-$(function() {
-    $(".selectable").selectable();
-});
-*/
-
+// NO DRAGGING (:
 $('img').on('dragstart', function(event) { event.preventDefault(); });
-
 </script>
-<script src="click.js"></script>
 <script src="timer.js"></script>
 <script src="play.js"></script>
-<script src="playtest.js"></script>
+<!-- <script src="playtest.js"></script> -->
 
 <script>
 $(document).ready(function() {

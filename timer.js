@@ -11,6 +11,6 @@ removeSound = function(sound, tick) {
 		current_sounds.splice(foundIndex, 1);
 		sounds_to_play[tick] = current_sounds;
 	} else {
-		window.alert("Warning: sound not found");
+		window.alert("Warning: Sound not found.");
 	}
 }
