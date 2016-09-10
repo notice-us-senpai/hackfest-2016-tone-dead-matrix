@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+  <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
 <div class="container">
@@ -40,7 +41,7 @@ var order = 16;
 for (var i = 0; i < order; i++) {
   $('.tone-matrix-table').append(sprintf('<tr class="r%s"></tr>', i));
   for (var j = 0; j < order; j++) {
-    $('.r' + i).append(sprintf('<td class="r%s-c%s" style="padding: 0px 0px;"><img src="Square.png"></td>', i, j));
+    $('.r' + i).append(sprintf('<td class="r%s-c%s" style="padding: 1px 0px;"><img src="Images/Square.png"></td>', i, j));
   }
 }
 
