@@ -17,6 +17,9 @@ function play() {
 			// All the sounds that is supposed to play at this tick is in the same mediaGroup
 		}
 
-		sounds_at_curr_tick[0].play(); // Just choose any of the sounds to play to start playing them simultaneously
+		sounds_at_curr_tick[0].play();
+		// Just choose any of the sounds to play to start playing them simultaneously
+
+		setTimeout(function() {}, tickLength);
 	}
 }
