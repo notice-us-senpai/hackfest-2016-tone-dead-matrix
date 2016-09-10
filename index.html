@@ -16,7 +16,7 @@
   <div class="row">
     <div class="col s12">
       <div class="tone-matrix">
-        <table class="t0 center-align" style="width:512px"></table>
+        <table class="matrix-table center-align" style="width:512px"></table>
       </div>
     </div>
   </div>
@@ -28,11 +28,11 @@
   </div>
   <div class="row">
     <div class="col s12">
+      <a id="t0" class="change-instrument btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
       <a id="t1" class="change-instrument btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
       <a id="t2" class="change-instrument btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
       <a id="t3" class="change-instrument btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
       <a id="t4" class="change-instrument btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
-      <a id="t5" class="change-instrument btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">play_arrow</i></a>
     </div>
   </div>
   </center>
@@ -48,24 +48,70 @@ function sprintf(format) {
 
 var order = 16;
 var table = 0;
+var images=["Exports/square.png","Exports/square_on.png"];
 
 for (var i = 0; i < order; i++) {
-  $('.t0').append(sprintf('<tr class="r%s"></tr>', i));
+  $('.matrix-table').append(sprintf('<tr class="r%s"></tr>', i));
   for (var j = 0; j < order; j++) {
-    $('.r' + i).append(sprintf('<td class="r%sc%s" style="padding: 1px 0px;"><img src="Images/Square.png"></td>', i, j));
+    $('.r' + i).append(sprintf('<td class="r%sc%s cell" data-row="%s" data-col="%s" style="padding: 1px 0px;"><img id="r%sc%s" src="%s"></td>', i, j, i, j, i, j, images[0]));
   }
 }
 
-var sounds_to_play = [];
+var sounds_to_play = []; // 16 per instrument array
 
 function OnOffMatrix(sounds) {
-    this.on_off = []; // initialise in next commit
+    this.on_off = [];
+    for (var i = 0; i < order; i++) {
+      this.on_off[i] = [];
+      for (var j = 0; j < order; j++) {
+        this.on_off[i][j] = false;
+      }
+    }
     this.sounds = sounds;
 }
 
+var instruments = [];
+var number_of_instruments = 5;
+var folders = ["piano", "flute", "electric_guitar", "tone_matrix", "xylophone"]
+for (var i = 0; i < number_of_instruments; i++) {
+  var sounds = [];
+  for(var j=1;j<=16;j++){
+    sounds[j]=folders+"j"+".wav";
+  }
+  instruments[i] = new OnOffMatrix(sounds);
+}
+
+var images=["Exports/square.png","Exports/square_on.png"];
+
+$('.cell').click(function(){
+
+    var flag=instruments[table].on_off[$(this).data("row")][$(this).data("col")];
+    var row = $(this).data("row");
+    var col = $(this).data("col");
+    instruments[table].on_off[row][col] = !flag;
+    if(!flag){
+      $('#r'+row+'c'+col).attr('src',images[1]);
+      //addSound(instruments[table].sounds[row],col);
+    }
+    else{
+      $('#r'+row+'c'+col).attr('src',images[0]);
+      //removeSound(instruments[table].sounds[row],col);
+    }
+});
+
 $('.change-instrument').click(function() {
   table = $(this).attr('id')[1]; // will break if id > 9
-  // pass
+  console.log(table);
+  for(var i=0;i<16;i++){
+    for(var j=0;j<16;j++){
+      if(instruments[table].on_off[i][j]){
+        $('#r'+i+'c'+j).attr('src',images[1]);
+      }
+      else{
+        $('#r'+i+'c'+j).attr('src',images[0]);
+      }
+    }
+  }
 });
 
 </script>
