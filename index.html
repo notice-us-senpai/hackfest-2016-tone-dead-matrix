@@ -73,12 +73,12 @@ $(function() {
     <!-- See current_instrument = $(this).attr('id')[1]; -->
     <a id="i0" class="piano change-instrument waves-effect waves-light active-instrument">
       <img class="five-instru-img-btn" src="./Exports/piano_on.png"></a>
-    <a id="i1" class="flute change-instrument waves-effect waves-light">
-      <img class="five-instru-img-btn" src="./Exports/flute_off.png"></a>
+    <a id="i1" class="guitar change-instrument waves-effect waves-light">
+      <img class="five-instru-img-btn" src="./Exports/guitar_off.png"></a>
     <a id="i2" class="drums change-instrument waves-effect waves-light">
       <img class="five-instru-img-btn" src="./Exports/drums_off.png"></a>
-    <a id="i3" class="violin change-instrument waves-effect waves-light">
-      <img class="five-instru-img-btn" src="./Exports/violin_off.png"></a>
+    <a id="i3" class="cowbell change-instrument waves-effect waves-light">
+      <img class="five-instru-img-btn" src="./Exports/cowbell_off.png"></a>
     <a id="i4" class="xylophone change-instrument waves-effect waves-light">
       <img class="five-instru-img-btn" src="./Exports/xylophone_off.png"></a>
     </center>
@@ -140,7 +140,7 @@ function OnOffMatrix(sounds) {
 }
 
 // Initialise on-off matrix table (tracks if a sound should be played)
-var sound_folder_names = ["piano", "flute", "electric_guitar", "tone_matrix", "xylophone"]
+var sound_folder_names = ["piano", "guitar_2", "all_drums", "alarma", "xylophone"]
 var number_of_instruments = 5;
 var instruments = [];
 //if (localStorage.instruments == undefined) {
@@ -164,11 +164,19 @@ var current_instrument = 0; // ID of active instrument/matrix
 //var current_instrument = (localStorage.current_instrument == undefined) ?
 //0 : localStorage.current_instrument;
 var isDown = false;   // Tracks status of mouse button
+var isSet = false;
+var isSwitchOn = true;
 $('.cell').mouseover(function(){
   if(isDown){
     var row = $(this).data("row");
     var col = $(this).data("col");
-    toggle(row,col);
+    if(!isSet){
+      isSet = true;
+      isSwitchOn = !instruments[current_instrument].on_off_matrix[row][col];
+    }
+    if(isSwitchOn == !instruments[current_instrument].on_off_matrix[row][col]){
+      toggle(row,col);
+    }
   }
 });
 $('.cell').click(function(){
@@ -209,7 +217,7 @@ $('.change-instrument').click(function() {
   // else the active but clicked instrument remains active
 
   // re-render the image
-  var instru_img_ref = ['piano', 'flute', 'drums', 'violin', 'xylophone'];
+  var instru_img_ref = ['piano', 'guitar', 'drums', 'cowbell', 'xylophone'];
   for (var i = 0; i < number_of_instruments; i++) {
     var instru_selector = '.' + instru_img_ref[i];
     if ($(instru_selector).hasClass(active_instru_class)) {
@@ -329,7 +337,7 @@ function navigate(right) {
   $('#i'+current_instrument).toggleClass(active_instru_class); // activate
 
   // re-render the image
-  var instru_img_ref = ['piano', 'flute', 'drums', 'violin', 'xylophone'];
+  var instru_img_ref = ['piano', 'guitar', 'drums', 'cowbell', 'xylophone'];
   for (var i = 0; i < number_of_instruments; i++) {
     var instru_selector = '.' + instru_img_ref[i];
     if ($(instru_selector).hasClass(active_instru_class)) {
@@ -419,6 +427,7 @@ $(document).ready(function() {
   })
   .mouseup(function() {
     isDown = false;    // When mouse goes up, set isDown to false
+    isSet = false;
   });
 
   play();
