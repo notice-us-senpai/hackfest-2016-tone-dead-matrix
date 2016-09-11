@@ -138,7 +138,7 @@ var sound_folder_names = ["piano", "flute", "electric_guitar", "tone_matrix", "x
 for (var i = 0; i < number_of_instruments; i++) {
   var sound_file_names = [];
   for (var j=1;j<=16;j++){
-    sound_file_names[j]="Sound/"+sound_folder_names[i]+"/"+j+".mp3";
+    sound_file_names[j-1]="Sound/"+sound_folder_names[i]+"/"+j+".mp3";
   }
   instruments[i] = new OnOffMatrix(sound_file_names);
 }
