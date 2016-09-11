@@ -160,23 +160,38 @@ var current_instrument = 0; // ID of active instrument/matrix
 // Retrieve
 //var current_instrument = (localStorage.current_instrument == undefined) ?
   //0 : localStorage.current_instrument;
-$('.cell').click(function(){
-  var row = $(this).data("row");
-  var col = $(this).data("col");
-  var flag = instruments[current_instrument].on_off_matrix[row][col];
+  var isDown = false;   // Tracks status of mouse button
+  $('.cell').mouseover(function(){
+    if(isDown){
+      var row = $(this).data("row");
+      var col = $(this).data("col");
+      toggle(row,col);
+    }
+  });
+  $('.cell').click(function(){
+    var row = $(this).data("row");
+    var col = $(this).data("col");
+    toggle(row,col);
+  });
 
-  instruments[current_instrument].on_off_matrix[row][col] = !flag;
 
-  // update image and sound
-  var square_selector = '#r'+row+'c'+col;
-  if (!flag) {
-    $(square_selector).attr('src', mat_sq_img[1]); // square_on
-    addSound(instruments[current_instrument].sounds[row], col);
-  } else {
-    $(square_selector).attr('src', mat_sq_img[0]);
-    removeSound(instruments[current_instrument].sounds[row], col);
+
+  function toggle(row,col){
+
+    var flag = instruments[current_instrument].on_off_matrix[row][col];
+
+    instruments[current_instrument].on_off_matrix[row][col] = !flag;
+
+    // update image and sound
+    var square_selector = '#r'+row+'c'+col;
+    if (!flag) {
+      $(square_selector).attr('src', mat_sq_img[1]); // square_on
+      addSound(instruments[current_instrument].sounds[row], col);
+    } else {
+      $(square_selector).attr('src', mat_sq_img[0]);
+      removeSound(instruments[current_instrument].sounds[row], col);
+    }
   }
-});
 
 // if instrument is changed
 // 1. toggle active-instrument classes for both the active and inactive instrument
@@ -397,6 +412,14 @@ function store() {
 }
 
 $(document).ready(function() {
+
+  $(document).mousedown(function() {
+    isDown = true;      // When mouse goes down, set isDown to true
+  })
+  .mouseup(function() {
+    isDown = false;    // When mouse goes up, set isDown to false
+  });
+
   play();
   //store();
 });
