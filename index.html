@@ -104,6 +104,7 @@ var img_dir = './Exports/';
 var mat_sq_img = [img_dir+"/square.png", img_dir+"square_on.png"]; // matrix square img
 
 // Initialise tone-matrix table (HTML)
+/*
 for (var i = 0; i < order; i++) {
   $('.tone-matrix').append(sprintf('<tr class="r%s"></tr>', i)); // row
   for (var j = 0; j < order; j++) {
@@ -112,17 +113,19 @@ for (var i = 0; i < order; i++) {
         i, j, i, j, i, j, mat_sq_img[0]));
   }
 }
+*/
 
 // Initialise tone-matrix table (ordered by time and pitch)
 var toPlay = true;
 var sounds_to_play = [];
-//if (localStorage.sounds_to_play == undefined) {
+if (typeof(localStorage.sounds_to_play) === "undefined") {
   for (var i = 0; i < order; i++) {
     sounds_to_play[i] = [];
   }
-//} else {
-  //sounds_to_play = JSON.parse(localStorage.sounds_to_play);
-//}
+} else {
+  console.log("sounds_to_play is retrieved.");
+  sounds_to_play = JSON.parse(localStorage.sounds_to_play);
+}
 
 // OnOffMatrix class which stores a 2D array of booleans (to play or not to play)
 function OnOffMatrix(sounds) {
@@ -140,7 +143,7 @@ function OnOffMatrix(sounds) {
 var sound_folder_names = ["piano", "flute", "electric_guitar", "tone_matrix", "xylophone"]
 var number_of_instruments = 5;
 var instruments = [];
-//if (localStorage.instruments == undefined) {
+if (typeof(localStorage.instruments) === "undefined") {
   for (var i = 0; i < number_of_instruments; i++) {
     var sound_file_names = [];
     for (var j=1;j<=16;j++){
@@ -148,18 +151,62 @@ var instruments = [];
     }
     instruments[i] = new OnOffMatrix(sound_file_names);
   }
-//} else {
-  //instruments = JSON.parse(localStorage.instruments);
-//}
+} else {
+  console.log("instruments is retrieved.");
+  instruments = JSON.parse(localStorage.instruments);
+}
 
 // When a cell is clicked, toggle the boolean (to play or not to play)
 // and subsequently the corresponding image and sound state
 var addSound;
 var removeSound;
-var current_instrument = 0; // ID of active instrument/matrix
+// var current_instrument = 0; // ID of active instrument/matrix
 // Retrieve
-//var current_instrument = (localStorage.current_instrument == undefined) ?
-  //0 : localStorage.current_instrument;
+var current_instrument;
+var active_instru_class = 'active-instrument';
+if (typeof(localStorage.current_instrument) === "undefined") {
+  current_instrument = 0;
+} else {
+  console.log("current_instrument is retrieved.");
+  current_instrument = localStorage.current_instrument;
+
+  // Update active-instrument
+  
+  if (!$('#i'+current_instrument).hasClass(active_instru_class)) {
+    $('.'+active_instru_class).removeClass(active_instru_class); // deactivate
+    $('#i'+current_instrument).toggleClass(active_instru_class); // activate
+  }
+  
+  // Update five-instruments images
+  var instru_img_ref = ['piano', 'flute', 'drums', 'violin', 'xylophone'];
+  for (var i = 0; i < number_of_instruments; i++) {
+    var instru_selector = '.' + instru_img_ref[i];
+    if ($(instru_selector).hasClass(active_instru_class)) {
+      $(instru_selector).html(
+        '<img class="five-instru-img-btn" src="'+img_dir+instru_img_ref[i]+'_on.png">');
+    } else {
+      $(instru_selector).html(
+        '<img class="five-instru-img-btn" src="'+img_dir+instru_img_ref[i]+'_off.png">');
+    }
+  }
+
+  // Update active-tone-matrix
+  for (var i = 0; i < order; i++) {
+    $('.tone-matrix').append(sprintf('<tr class="r%s"></tr>', i)); // row
+    for (var j = 0; j < order; j++) {
+      if (instruments[current_instrument].on_off_matrix[i][j]) {
+        $('.r' + i).append(
+          sprintf('<td class="cell r%sc%s" data-row="%s" data-col="%s" style="padding: 1px 0px;"><img id="r%sc%s" src="%s"></td>',
+            i, j, i, j, i, j, mat_sq_img[1]));
+      } else {
+        $('.r' + i).append(
+          sprintf('<td class="cell r%sc%s" data-row="%s" data-col="%s" style="padding: 1px 0px;"><img id="r%sc%s" src="%s"></td>',
+            i, j, i, j, i, j, mat_sq_img[0]));
+      }
+    }
+  }
+}
+
 $('.cell').click(function(){
   var row = $(this).data("row");
   var col = $(this).data("col");
@@ -182,7 +229,6 @@ $('.cell').click(function(){
 // 1. toggle active-instrument classes for both the active and inactive instrument
 // 2. update to the corresponding images
 // 3. re-renders the tone-matrix to that of the active instrument (state is kept)
-var active_instru_class = 'active-instrument';
 $('.change-instrument').click(function() {
   // if the clicked instrument was not an active instrument
   // make the active inactive and make the clicked instrument active
@@ -387,10 +433,11 @@ function updateBoolImgSound(row, col) {
 // Store
 function store() {
   if (typeof(Storage) !== "undefined") {
-    //localStorage.setItem("current_instrument", current_instrument);
-    //localStorage.instruments = JSON.stringify(instruments);
-    //localStorage.sounds_to_play = JSON.stringify(sounds_to_play);
-    setTimeout(store, 1000);
+    // console.log("store() is called");
+    localStorage.current_instrument = current_instrument;
+    localStorage.instruments = JSON.stringify(instruments);
+    localStorage.sounds_to_play = JSON.stringify(sounds_to_play);
+    setTimeout(store, 2000);
   } else {
     alert('There will be no back-up for your tones ):');
   }
@@ -398,7 +445,10 @@ function store() {
 
 $(document).ready(function() {
   play();
-  //store();
+});
+
+$(window).load(function(){
+  store();
 });
 </script>
 
