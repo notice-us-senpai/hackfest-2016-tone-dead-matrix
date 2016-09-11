@@ -312,6 +312,7 @@ for (var t = 100; t <= 900; t++) {
   Mousetrap.bind(key, function(e, combo) {
     combo = combo[2]+combo[4]+combo[6];
     $('#tempo').val(parseInt(combo));
+    tickTime = 60000/$('#tempo').val();
   });
 }
 
