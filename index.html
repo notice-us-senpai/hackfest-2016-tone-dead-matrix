@@ -151,6 +151,7 @@ function OnOffMatrix(sounds) {
 var sound_folder_names = ["piano", "guitar", "drum", "alarma", "xylophone","nyans"];
 var total_instruments = 6;
 var number_of_instruments = 5;
+var number_of_instruments_fixed = 5;
 var instruments = [];
 //if (localStorage.instruments == undefined) {
   for (var i = 0; i < total_instruments; i++) {
@@ -358,10 +359,10 @@ Mousetrap.bind('left', function() {
 function navigate(right) {
   $('.'+active_instru_class).removeClass(active_instru_class); // deactivate
   if (right) {
-    current_instrument = (current_instrument+1) % number_of_instruments;
+    current_instrument = (current_instrument+1) % number_of_instruments_fixed;
   } else {
     current_instrument = (current_instrument == 0) ?
-      number_of_instruments-1 : current_instrument-1;
+      number_of_instruments_fixed-1 : current_instrument-1;
   }
   $('#i'+current_instrument).toggleClass(active_instru_class); // activate
 
