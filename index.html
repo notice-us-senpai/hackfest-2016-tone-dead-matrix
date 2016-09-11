@@ -79,6 +79,10 @@ $(function() {
     </center>
   </div> <!-- End of col s12 no-select div -->
   </div> <!-- End of row 2 div -->
+
+  <div class="row">
+    
+  </div>
 </div> <!-- End of no-select div -->
 
 <script>
@@ -92,7 +96,7 @@ function sprintf(format) {
 
 var order = 16; // size of matrix
 var img_dir = './Exports/';
-var mat_sq_img = [img_dir+"/square.png",img_dir+"square_on.png"]; // matrix square img
+var mat_sq_img = [img_dir+"/square.png", img_dir+"square_on.png"]; // matrix square img
 
 // Initialise tone-matrix table (HTML)
 for (var i = 0; i < order; i++) {
@@ -156,24 +160,6 @@ $('.cell').click(function(){
     removeSound(instruments[current_instrument].sounds[row], col);
   }
 });
-
-// HELPER: Returns a new array sliced from xs (array) just before ch (char)
-// ch MUST exist in xs (no error-checking)
-// Should have done splice right...?
-function get_before(xs, ch) {
-  var i = 0;
-  var ys = [];
-  while (true) {
-    if (xs[i] != ch) {
-      ys[i] = xs[i];
-      i++;
-    }
-    else {
-      break;
-    }
-  }
-  return ys;
-}
 
 // if instrument is changed
 // 1. toggle active-instrument classes for both the active and inactive instrument
@@ -340,7 +326,7 @@ for (var r = 10; r < order; r++) {
 
 // Updates the boolean, image, and sound upon keyboard shortcut
 function updateBoolImgSound(row, col) {
-  console.log(row + ' ' + col);
+  // console.log(row + ' ' + col);
   row = parseInt(row);
   col = parseInt(col);
   var flag = instruments[current_instrument].on_off_matrix[row][col];
