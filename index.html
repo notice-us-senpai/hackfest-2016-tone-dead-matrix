@@ -32,9 +32,6 @@ $(function() {
 });
 </script>
 <div class="no-select">
-  <div id="b" style="position:absolute; top:-1000px">
-    <img id="plane" src="Exports/e.jpg" />​
-  </div>
   <div class="row"></div> <!-- Filler row -->
   <div class="row"> <!-- Row 1 -->
   <div class="col s8">
@@ -330,15 +327,15 @@ Mousetrap.bind('up up down down left right left right b a enter', function() {
   animatePlane();
 });
 
-/*
+
 for (var t = 100; t <= 900; t++) {
   var key = t.toString();
   key = 't '+key[0]+' '+key[1]+' '+key[2];
   Mousetrap.bind(key, function() {
-    updateBoolImgSound(key);
+    $('#tempo').val(t);
   });
 }
-*/
+
 
 // Keyboard shortcut: Pause selected
 Mousetrap.bind('p', function() {
