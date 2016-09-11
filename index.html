@@ -373,6 +373,28 @@ for (var r = 0; r < 10; r++) {
   }
 }
 
+for (var r = 0; r < 10; r++) {
+  for (var c = 10; c < order; c++) {
+    var row = r.toString();
+    var col = c.toString();
+    var key = sprintf('0 %s %s %s', r, col[0], col[1]);
+    Mousetrap.bind(key, function(e, combo) {
+      updateBoolImgSound(combo[2], combo[4]+combo[6]);
+    });
+  }
+}
+
+for (var r = 10; r < order; r++) {
+  for (var c = 0; c < 10; c++) {
+    var row = r.toString();
+    var col = c.toString();
+    var key = sprintf('%s %s 0 %s', row[0], row[1], c);
+    Mousetrap.bind(key, function(e, combo) {
+      updateBoolImgSound(combo[0]+combo[2], combo[6]);
+    });
+  }
+}
+
 for (var r = 10; r < order; r++) {
   for (var c = 10; c < order; c++) {
     var row = r.toString();
