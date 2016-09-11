@@ -299,12 +299,21 @@ function pauseSelect() {
 
 // play.js
 var tick = 0;
-var tempo = 120;
+var tempo = $('#tempo').val();
 var tickTime = 60000/tempo;
 
 $('#tempo').on('input', function() {
   tickTime = 60000/$('#tempo').val();
 });
+
+for (var t = 100; t <= 900; t++) {
+  var key = t.toString();
+  key = sprintf('t %s %s %s', key[0], key[1], key[2]);
+  Mousetrap.bind(key, function(e, combo) {
+    combo = combo[2]+combo[4]+combo[6];
+    $('#tempo').val(parseInt(combo));
+  });
+}
 
 // NO DRAGGING (:
 $('img').on('dragstart', function(event) { event.preventDefault(); });
@@ -326,16 +335,6 @@ Mousetrap.bind('up up down down left right left right b a enter', function() {
 
   animatePlane();
 });
-
-
-for (var t = 100; t <= 900; t++) {
-  var key = t.toString();
-  key = 't '+key[0]+' '+key[1]+' '+key[2];
-  Mousetrap.bind(key, function() {
-    $('#tempo').val(t);
-  });
-}
-
 
 // Keyboard shortcut: Pause selected
 Mousetrap.bind('p', function() {
