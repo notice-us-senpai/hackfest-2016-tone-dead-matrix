@@ -101,7 +101,10 @@ function sprintf(format) {
 
 var order = 16; // size of matrix
 var img_dir = './Exports/';
-var mat_sq_img = [img_dir+"/square.png", img_dir+"square_on.png"]; // matrix square img
+var mat_sq_img = [img_dir + "/square.png",
+                  img_dir + "/square_on.png",
+                  img_dir + "/square_on_playing.png",
+                  img_dir + "/square_playing.png"]; // matrix square img
 
 // Initialise tone-matrix table (HTML)
 /*
@@ -207,9 +210,23 @@ if (typeof(localStorage.current_instrument) === "undefined") {
   }
 }
 
+var isDown = false;   // Tracks status of mouse button
+$('.cell').mouseover(function(){
+  if(isDown){
+    var row = $(this).data("row");
+    var col = $(this).data("col");
+    toggle(row,col);
+  }
+});
+
 $('.cell').click(function(){
   var row = $(this).data("row");
   var col = $(this).data("col");
+  toggle(row,col);
+});
+
+function toggle(row,col){
+
   var flag = instruments[current_instrument].on_off_matrix[row][col];
 
   instruments[current_instrument].on_off_matrix[row][col] = !flag;
@@ -223,7 +240,7 @@ $('.cell').click(function(){
     $(square_selector).attr('src', mat_sq_img[0]);
     removeSound(instruments[current_instrument].sounds[row], col);
   }
-});
+}
 
 // if instrument is changed
 // 1. toggle active-instrument classes for both the active and inactive instrument
@@ -444,6 +461,14 @@ function store() {
 }
 
 $(document).ready(function() {
+
+  $(document).mousedown(function() {
+    isDown = true;      // When mouse goes down, set isDown to true
+  })
+  .mouseup(function() {
+    isDown = false;    // When mouse goes up, set isDown to false
+  });
+
   play();
 });
 
