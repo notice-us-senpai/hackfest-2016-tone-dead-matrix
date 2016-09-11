@@ -32,6 +32,7 @@ $(function() {
 });
 </script>
 <div class="no-select">
+  <div class="row"></div> <!-- Filler row -->
   <div class="row"> <!-- Row 1 -->
   <div class="col s8">
     <center>
@@ -113,11 +114,15 @@ for (var i = 0; i < order; i++) {
 }
 
 // Initialise tone-matrix table (ordered by time and pitch)
-var sounds_to_play = [];
 var toPlay = true;
-for (var i = 0; i < order; i++) {
-  sounds_to_play[i] = [];
-}
+var sounds_to_play = [];
+//if (localStorage.sounds_to_play == undefined) {
+  for (var i = 0; i < order; i++) {
+    sounds_to_play[i] = [];
+  }
+//} else {
+  //sounds_to_play = JSON.parse(localStorage.sounds_to_play);
+//}
 
 // OnOffMatrix class which stores a 2D array of booleans (to play or not to play)
 function OnOffMatrix(sounds) {
@@ -132,22 +137,29 @@ function OnOffMatrix(sounds) {
 }
 
 // Initialise on-off matrix table (tracks if a sound should be played)
-var instruments = [];
-var number_of_instruments = 5;
 var sound_folder_names = ["piano", "flute", "electric_guitar", "tone_matrix", "xylophone"]
-for (var i = 0; i < number_of_instruments; i++) {
-  var sound_file_names = [];
-  for (var j=1;j<=16;j++){
-    sound_file_names[j-1]="Sound/"+sound_folder_names[i]+"/"+j+".mp3";
+var number_of_instruments = 5;
+var instruments = [];
+//if (localStorage.instruments == undefined) {
+  for (var i = 0; i < number_of_instruments; i++) {
+    var sound_file_names = [];
+    for (var j=1;j<=16;j++){
+      sound_file_names[j-1]="Sound/"+sound_folder_names[i]+"/"+j+".mp3";
+    }
+    instruments[i] = new OnOffMatrix(sound_file_names);
   }
-  instruments[i] = new OnOffMatrix(sound_file_names);
-}
+//} else {
+  //instruments = JSON.parse(localStorage.instruments);
+//}
 
 // When a cell is clicked, toggle the boolean (to play or not to play)
 // and subsequently the corresponding image and sound state
 var addSound;
 var removeSound;
 var current_instrument = 0; // ID of active instrument/matrix
+// Retrieve
+//var current_instrument = (localStorage.current_instrument == undefined) ?
+  //0 : localStorage.current_instrument;
 $('.cell').click(function(){
   var row = $(this).data("row");
   var col = $(this).data("col");
@@ -243,7 +255,6 @@ function resetAllSelect() {
 
 var playPauseHtml=['<i class="material-icons left">pause</i>Pause The World','<i class="material-icons left">play_arrow</i>Resume The World'];
 
-
 // PAUSE PLAYING
 function pauseSelect() {
   if(toPlay){
@@ -265,6 +276,11 @@ $('img').on('dragstart', function(event) { event.preventDefault(); });
 // Konami Code
 Mousetrap.bind('up up down down left right left right b a enter', function() {
   alert('Nani wa Konami Code?');
+});
+
+// Keyboard shortcut: Pause selected
+Mousetrap.bind('p', function() {
+  pauseSelect();
 });
 
 // Keyboard shortcut: Reset active
@@ -368,8 +384,21 @@ function updateBoolImgSound(row, col) {
 <!-- <script src="playtest.js"></script> -->
 
 <script>
+// Store
+function store() {
+  if (typeof(Storage) !== "undefined") {
+    //localStorage.setItem("current_instrument", current_instrument);
+    //localStorage.instruments = JSON.stringify(instruments);
+    //localStorage.sounds_to_play = JSON.stringify(sounds_to_play);
+    setTimeout(store, 1000);
+  } else {
+    alert('There will be no back-up for your tones ):');
+  }
+}
+
 $(document).ready(function() {
   play();
+  //store();
 });
 </script>
 

@@ -4,7 +4,7 @@ html {
 
 body {
 	background-image: url('./Exports/background.jpg');
-	padding-top: 4px;
+	/*padding-top: 4px;*/
 	opacity: 1;
   transition: 4s opacity;
 }
@@ -50,4 +50,8 @@ li:after {
 
 .btn {
 	width: 100%;
+}
+
+.cell {
+	padding-left: 1px;
 }
