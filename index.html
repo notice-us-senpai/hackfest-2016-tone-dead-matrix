@@ -164,11 +164,19 @@ var current_instrument = 0; // ID of active instrument/matrix
 //var current_instrument = (localStorage.current_instrument == undefined) ?
 //0 : localStorage.current_instrument;
 var isDown = false;   // Tracks status of mouse button
+var isSet = false;
+var isSwitchOn = true;
 $('.cell').mouseover(function(){
   if(isDown){
     var row = $(this).data("row");
     var col = $(this).data("col");
-    toggle(row,col);
+    if(!isSet){
+      isSet = true;
+      isSwitchOn = !instruments[current_instrument].on_off_matrix[row][col];
+    }
+    if(isSwitchOn == !instruments[current_instrument].on_off_matrix[row][col]){
+      toggle(row,col);
+    }
   }
 });
 $('.cell').click(function(){
@@ -419,6 +427,7 @@ $(document).ready(function() {
   })
   .mouseup(function() {
     isDown = false;    // When mouse goes up, set isDown to false
+    isSet = false;
   });
 
   play();
