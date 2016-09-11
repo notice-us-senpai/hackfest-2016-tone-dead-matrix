@@ -4,7 +4,7 @@ html {
 
 body {
 	background-image: url('./Exports/background.jpg');
-	padding-top: 4px;
+	/*padding-top: 4px;*/
 	opacity: 1;
   transition: 4s opacity;
 }
@@ -46,4 +46,21 @@ li:before {
 
 li:after {
 	content: " *";
+}
+
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn {
+	width: 100%;
+}
+
+.cell {
+	padding-left: 1px;
 }
