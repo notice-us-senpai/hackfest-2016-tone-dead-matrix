@@ -87,6 +87,8 @@ $(function() {
       <img class="five-instru-img-btn" src="./Exports/cowbell_off.png"></a>
     <a id="i4" class="xylophone change-instrument waves-effect waves-light">
       <img class="five-instru-img-btn" src="./Exports/xylophone_off.png"></a>
+    <a id="i5" class="konami change-instrument waves-effect waves-light">
+      <img class="five-instru-img-btn" src="./Exports/konami_off.png"></a>
     </center>
   </div> <!-- End of col s12 no-select div -->
   </div> <!-- End of row 2 div -->
@@ -146,11 +148,12 @@ function OnOffMatrix(sounds) {
 }
 
 // Initialise on-off matrix table (tracks if a sound should be played)
-var sound_folder_names = ["piano", "guitar", "drum", "alarma", "xylophone"]
+var sound_folder_names = ["piano", "guitar", "drum", "alarma", "xylophone","nyans"];
+var total_instruments = 6;
 var number_of_instruments = 5;
 var instruments = [];
 //if (localStorage.instruments == undefined) {
-  for (var i = 0; i < number_of_instruments; i++) {
+  for (var i = 0; i < total_instruments; i++) {
     var sound_file_names = [];
     for (var j=1;j<=16;j++){
       sound_file_names[j-1]="Sound/"+sound_folder_names[i]+"/"+j+".mp3";
@@ -223,7 +226,7 @@ $('.change-instrument').click(function() {
   // else the active but clicked instrument remains active
 
   // re-render the image
-  var instru_img_ref = ['piano', 'guitar', 'drums', 'cowbell', 'xylophone'];
+  var instru_img_ref = ['piano', 'guitar', 'drums', 'cowbell', 'xylophone', "konami"];
   for (var i = 0; i < number_of_instruments; i++) {
     var instru_selector = '.' + instru_img_ref[i];
     if ($(instru_selector).hasClass(active_instru_class)) {
@@ -322,19 +325,10 @@ $('img').on('dragstart', function(event) { event.preventDefault(); });
 // Konami Code
 Mousetrap.bind('up up down down left right left right b a enter', function() {
   alert('Nani wa Konami Code?');
-  var img = $("#plane"),
-      width = img.get(0).width,
-      screenWidth = $(window).width(),
-      duration = 5000;
 
-  function animatePlane() {
-      img.css("top", -width)
-         .animate({
-              "bottom": screenWidth
-          }, duration, animatePlane);
-  }
+  $(".konami").show();
+  number_of_instruments++;
 
-  animatePlane();
 });
 
 // Keyboard shortcut: Pause selected
@@ -372,7 +366,7 @@ function navigate(right) {
   $('#i'+current_instrument).toggleClass(active_instru_class); // activate
 
   // re-render the image
-  var instru_img_ref = ['piano', 'guitar', 'drums', 'cowbell', 'xylophone'];
+  var instru_img_ref = ['piano', 'guitar', 'drums', 'cowbell', 'xylophone',"konami"];
   for (var i = 0; i < number_of_instruments; i++) {
     var instru_selector = '.' + instru_img_ref[i];
     if ($(instru_selector).hasClass(active_instru_class)) {
@@ -478,6 +472,8 @@ function store() {
 }
 
 $(document).ready(function() {
+
+  $('.konami').hide();
 
   $(document).mousedown(function() {
     isDown = true;      // When mouse goes down, set isDown to true
