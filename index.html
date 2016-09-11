@@ -100,7 +100,10 @@ function sprintf(format) {
 
 var order = 16; // size of matrix
 var img_dir = './Exports/';
-var mat_sq_img = [img_dir+"/square.png", img_dir+"square_on.png"]; // matrix square img
+var mat_sq_img = [img_dir + "/square.png", 
+                  img_dir + "/square_on.png", 
+                  img_dir + "/square_on_playing.png",
+                  img_dir + "/square_playing.png"]; // matrix square img
 
 // Initialise tone-matrix table (HTML)
 for (var i = 0; i < order; i++) {
@@ -154,6 +157,7 @@ $('.cell').click(function(){
   var flag = instruments[current_instrument].on_off_matrix[row][col];
 
   instruments[current_instrument].on_off_matrix[row][col] = !flag;
+  console.log("ROW: " + row + " COL: " + col + " " + instruments[current_instrument].on_off_matrix[row][col]);
 
   // update image and sound
   var square_selector = '#r'+row+'c'+col;
