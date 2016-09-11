@@ -45,5 +45,5 @@ function play() {
 		}
 	}
 
-	setTimeout(play,200);
+	setTimeout(play, tickTime);
 }
