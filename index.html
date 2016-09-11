@@ -21,7 +21,7 @@
   <link rel="icon" href="oracion-seis.png" type="image/png">
 
   <!-- Keyboard shortcuts -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/mousetrap/1.4.6/mousetrap.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/mousetrap/1.4.6/mousetrap.min.js"></script>
 </head>
 
 <body>
@@ -334,8 +334,7 @@ for (var r = 10; r < order; r++) {
 
 // Updates the boolean, image, and sound upon keyboard shortcut
 function updateBoolImgSound(row, col) {
-  console.log(row);
-  console.log(col);
+  console.log(row + ' ' + col);
   row = parseInt(row);
   col = parseInt(col);
   var flag = instruments[current_instrument].on_off_matrix[row][col];
