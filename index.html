@@ -32,6 +32,9 @@ $(function() {
 });
 </script>
 <div class="no-select">
+  <div id="b" style="position:absolute; top:-1000px">
+    <img id="plane" src="Exports/e.jpg" />​
+  </div>
   <div class="row"></div> <!-- Filler row -->
   <div class="row"> <!-- Row 1 -->
   <div class="col s8">
@@ -300,7 +303,21 @@ $('img').on('dragstart', function(event) { event.preventDefault(); });
 // Konami Code
 Mousetrap.bind('up up down down left right left right b a enter', function() {
   alert('Nani wa Konami Code?');
+  var img = $("#plane"),
+      width = img.get(0).width,
+      screenWidth = $(window).width(),
+      duration = 5000;
+
+  function animatePlane() {
+      img.css("top", -width)
+         .animate({
+              "bottom": screenWidth
+          }, duration, animatePlane);
+  }
+
+  animatePlane();
 });
+
 
 // Keyboard shortcut: Pause selected
 Mousetrap.bind('p', function() {
