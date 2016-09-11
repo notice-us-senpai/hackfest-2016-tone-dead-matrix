@@ -5,15 +5,15 @@
   <!-- JQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <!-- <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script> -->
-  
+
   <!-- Google Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  
+
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-  
+
   <!-- Our styles -->
   <link rel="stylesheet" href="style.css" type="text/css">
 
@@ -58,6 +58,10 @@ $(function() {
     <a class="waves-effect waves-light btn" onClick="resetAllSelect();">
       <i class="material-icons left">stop</i>End The World</a>
     </div>
+    <div class="row">
+    <a id='pauseBtn' class="waves-effect waves-light btn" onClick="pauseSelect();">
+      <i class="material-icons left">pause</i>Pause The World</a>
+    </div>
   </div>
   </div> <!-- End of row 1 div -->
 
@@ -81,7 +85,7 @@ $(function() {
   </div> <!-- End of row 2 div -->
 
   <div class="row">
-    
+
   </div>
 </div> <!-- End of no-select div -->
 
@@ -103,13 +107,14 @@ for (var i = 0; i < order; i++) {
   $('.tone-matrix').append(sprintf('<tr class="r%s"></tr>', i)); // row
   for (var j = 0; j < order; j++) {
     $('.r' + i).append(
-      sprintf('<td class="cell r%sc%s" data-row="%s" data-col="%s" style="padding: 1px 0px;"><img id="r%sc%s" src="%s"></td>', 
+      sprintf('<td class="cell r%sc%s" data-row="%s" data-col="%s" style="padding: 1px 0px;"><img id="r%sc%s" src="%s"></td>',
         i, j, i, j, i, j, mat_sq_img[0]));
   }
 }
 
 // Initialise tone-matrix table (ordered by time and pitch)
 var sounds_to_play = [];
+var toPlay = true;
 for (var i = 0; i < order; i++) {
   sounds_to_play[i] = [];
 }
@@ -147,7 +152,7 @@ $('.cell').click(function(){
   var row = $(this).data("row");
   var col = $(this).data("col");
   var flag = instruments[current_instrument].on_off_matrix[row][col];
-    
+
   instruments[current_instrument].on_off_matrix[row][col] = !flag;
 
   // update image and sound
@@ -174,7 +179,7 @@ $('.change-instrument').click(function() {
     $(this).toggleClass(active_instru_class); // activate
   }
   // else the active but clicked instrument remains active
-  
+
   // re-render the image
   var instru_img_ref = ['piano', 'flute', 'drums', 'violin', 'xylophone'];
   for (var i = 0; i < number_of_instruments; i++) {
@@ -236,6 +241,21 @@ function resetAllSelect() {
   }
 }
 
+var playPauseHtml=['<i class="material-icons left">pause</i>Pause The World','<i class="material-icons left">play_arrow</i>Resume The World'];
+
+
+// PAUSE PLAYING
+function pauseSelect() {
+  if(toPlay){
+    toPlay = false;
+    $('#pauseBtn').html(playPauseHtml[1]);
+  }
+  else{
+    toPlay = true;
+    $('#pauseBtn').html(playPauseHtml[0]);
+  }
+}
+
 // play.js
 var tick = 0;
 
@@ -271,11 +291,11 @@ function navigate(right) {
   if (right) {
     current_instrument = (current_instrument+1) % number_of_instruments;
   } else {
-    current_instrument = (current_instrument == 0) ? 
+    current_instrument = (current_instrument == 0) ?
       number_of_instruments-1 : current_instrument-1;
   }
   $('#i'+current_instrument).toggleClass(active_instru_class); // activate
-  
+
   // re-render the image
   var instru_img_ref = ['piano', 'flute', 'drums', 'violin', 'xylophone'];
   for (var i = 0; i < number_of_instruments; i++) {
@@ -331,7 +351,7 @@ function updateBoolImgSound(row, col) {
   col = parseInt(col);
   var flag = instruments[current_instrument].on_off_matrix[row][col];
   instruments[current_instrument].on_off_matrix[row][col] = !flag;
-  
+
   // update image and sound
   var square_selector = '#r'+row+'c'+col;
   if (!flag) {
